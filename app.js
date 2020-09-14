@@ -9,6 +9,7 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var authorRouter = require('./routes/author');
 var expressLayouts = require('express-ejs-layouts');
 var app = express();
 
@@ -25,7 +26,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-
+app.use('/authors',authorRouter);
 
 var mongoose = require('mongoose');
   mongoose.connect(process.env.DATABASE_URL , {
@@ -51,5 +52,5 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-app.listen(process.env.PORT || 8080);
+app.listen(process.env.PORT || 7000);
 module.exports = app;
