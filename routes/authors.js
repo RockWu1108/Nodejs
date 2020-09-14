@@ -9,15 +9,15 @@ router.get('/', async (req, res) => {
         //flags = i 表示忽略大小寫
         searchOptions.name = new RegExp(req.query.name , 'i');
     }
+
+     const authors = await  Author.find({name : searchOptions.name})
+
     try {
-        const authors = await  Author.find({name : searchOptions.name})
-        console.log(authors);
-        res.render('authors/index' , {
-            authors : authors,
-            searchOptions : req.query
+            res.render('authors/index', {
+                authors: authors,
+                searchOptions: req.query
 
-
-        });
+            });
     }
     catch (e) {
         res.redirect('/');
@@ -34,31 +34,20 @@ router.post('/' , async (req , res) =>{
     const author = new Author({
         name : req.body.name
     });
+
     try {
         const newAuthor = await author.save();
-        res.redirect(`authors`);
+        res.redirect('authors');
     }
-    catch {
-
+    catch(err){
+            console.log(err);
             res.render('authors/new',{
                 author : author,
                 errorMessage : 'error creating'
-            })
+            });
 
     }
 
-    // author.save((error , newAuthor) =>{
-    //     if(error){
-    //         res.render('authors/new',{
-    //             author : author,
-    //             errorMessage : 'error creating'
-    //         })
-    //     }
-    //     else{
-    //         res.redirect(`authors`);
-    //
-    //     }
-    // });
 });
 
 module.exports = router;
