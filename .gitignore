@@ -1,3 +1,5 @@
 # Project exclude paths
+#忽略清單
 .env
 node_modules
+public/uploads
