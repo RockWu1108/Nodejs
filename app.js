@@ -10,6 +10,7 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var authorRouter = require('./routes/authors');
+var bookRouter = require('./routes/books');
 var expressLayouts = require('express-ejs-layouts');
 var app = express();
 var bodyParser  = require('body-parser');
@@ -32,7 +33,7 @@ app.use(bodyParser.urlencoded({limit : '10mb' , extended: false}));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/authors',authorRouter);
-
+app.use('/books',bookRouter);
 // mongoose setting
 var mongoose = require('mongoose');
   mongoose.connect(process.env.DATABASE_URL , {

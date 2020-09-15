@@ -10,10 +10,11 @@ router.get('/', async (req, res) => {
         searchOptions.name = new RegExp(req.query.name , 'i');
     }
 
-     const authors = await  Author.find({name : searchOptions.name})
 
     try {
-            res.render('authors/index', {
+        const authors = await  Author.find({name : searchOptions.name})
+
+        res.render('authors/index', {
                 authors: authors,
                 searchOptions: req.query
 
@@ -39,15 +40,12 @@ router.post('/' , async (req , res) =>{
         const newAuthor = await author.save();
         res.redirect('authors');
     }
-    catch(err){
-            console.log(err);
+    catch{
             res.render('authors/new',{
                 author : author,
                 errorMessage : 'error creating'
             });
-
     }
-
 });
 
 module.exports = router;
