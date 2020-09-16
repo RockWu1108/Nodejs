@@ -1,51 +1,44 @@
-var express = require('express');
-var router = express.Router();
-var Author = require('../models/author');
-// all author route
+const express = require('express')
+const router = express.Router()
+const Author = require('../models/author')
+
+// All Authors Route
 router.get('/', async (req, res) => {
     let searchOptions = {}
-
-    if(req.query.name !=null && req.query.name!==''){
-        //flags = i 表示忽略大小寫
-        searchOptions.name = new RegExp(req.query.name , 'i');
+    if (req.query.name != null && req.query.name !== '') {
+        searchOptions.name = new RegExp(req.query.name, 'i')
     }
-
-
     try {
-        const authors = await  Author.find({name : searchOptions.name})
-
+        const authors = await Author.find(searchOptions)
         res.render('authors/index', {
-                authors: authors,
-                searchOptions: req.query
-
-            });
+            authors: authors,
+            searchOptions: req.query
+        })
+    } catch {
+        res.redirect('/')
     }
-    catch (e) {
-        res.redirect('/');
-    }
-});
+})
 
-// new Author route
-router.get('/new' , (req , res) =>{
-    res.render('authors/new' , {author: new Author()});
-});
+// New Author Route
+router.get('/new', (req, res) => {
+    res.render('authors/new', { author: new Author() })
+})
 
-router.post('/' , async (req , res) =>{
-
+// Create Author Route
+router.post('/', async (req, res) => {
     const author = new Author({
-        name : req.body.name
-    });
-
+        name: req.body.name
+    })
     try {
-        const newAuthor = await author.save();
-        res.redirect('authors');
+        const newAuthor = await author.save()
+        // res.redirect(`authors/${newAuthor.id}`)
+        res.redirect(`authors`)
+    } catch {
+        res.render('authors/new', {
+            author: author,
+            errorMessage: 'Error creating Author'
+        })
     }
-    catch{
-            res.render('authors/new',{
-                author : author,
-                errorMessage : 'error creating'
-            });
-    }
-});
+})
 
-module.exports = router;
+module.exports = router
