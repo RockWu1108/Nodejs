@@ -1,45 +1,45 @@
-const mongoose  = require('mongoose');
-const path = require('path');
-const coverImageBasePath = 'uploads/bookCovers'
+const mongoose = require('mongoose')
+
 const bookSchema = new mongoose.Schema({
-    title : {
-        type : String,
-        required : true
-    },
-    description:{
-        type: String
-    },
-    publishDate :{
-        type : Date,
+    title: {
+        type: String,
         required: true
     },
-    pageCount : {
-        type : Number,
-        required : true
+    description: {
+        type: String
     },
-    createdAt : {
-        type : Date,
-        required : true,
-        default : Date.now
+    publishDate: {
+        type: Date,
+        required: true
     },
-    coverImageName :{
-        type : String,
-        required : true
+    pageCount: {
+        type: Number,
+        required: true
     },
-    author : {
-        type : mongoose.Schema.Types.ObjectId,
-        required : true,
-        //引用models 中 author.js export('Author')
-        ref : 'Author'
+    createdAt: {
+        type: Date,
+        required: true,
+        default: Date.now
+    },
+    coverImage: {
+        type: Buffer,
+        required: true
+    },
+    coverImageType: {
+        type: String,
+        required: true
+    },
+    author: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: 'Author'
     }
-
-});
-
-// virtual 屬性，方便使用，但這些屬性不會存進 database
-bookSchema.virtual('coverImagePath').get(function () {
- if(this.coverImageName !=null){
-     return path.join('/' , coverImageBasePath , this.coverImageName);
- }
 })
-module.exports = mongoose.model('Book' , bookSchema);
-module.exports.coverImageBasePath =  coverImageBasePath;
+
+bookSchema.virtual('coverImagePath').get(function() {
+    if (this.coverImage != null && this.coverImageType != null) {
+        return `data:${this.coverImageType};charset=utf-8;base64,${this.coverImage.toString('base64')}`
+    }
+})
+
+module.exports = mongoose.model('Book', bookSchema)
