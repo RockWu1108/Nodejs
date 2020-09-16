@@ -27,7 +27,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 //bodyParser setting
-app.use(bodyParser.urlencoded({limit : '500mb' , extended: false}));
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({limit : '50mb' , extended: false}));
 
 //router setting
 app.use('/', indexRouter);
